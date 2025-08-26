@@ -81,6 +81,7 @@ struct adreno_gpu_funcs {
 	int (*feature_probe)(struct msm_gpu *gpu);
 	int (*cx_mem_init)(struct msm_gpu *gpu);
 	void (*bus_halt)(struct adreno_gpu *adreno_gpu, bool gx_off);
+	int (*mmu_fault_handler)(void *arg, unsigned long iova, int flags, void *data);
 };
 
 struct adreno_reglist {
