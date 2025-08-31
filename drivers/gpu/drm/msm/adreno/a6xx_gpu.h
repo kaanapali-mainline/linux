@@ -8,6 +8,7 @@
 #include "adreno_gpu.h"
 #include "a6xx_enums.xml.h"
 #include "a7xx_enums.xml.h"
+#include "a8xx_enums.xml.h"
 #include "a6xx_perfcntrs.xml.h"
 #include "a7xx_perfcntrs.xml.h"
 #include "a6xx.xml.h"
@@ -312,6 +313,7 @@ void a7xx_patch_pwrup_reglist(struct msm_gpu *gpu);
 int a7xx_preempt_start(struct msm_gpu *gpu);
 int a7xx_cp_init(struct msm_gpu *gpu);
 
+void a8xx_aperture_set(struct msm_gpu *gpu, enum adreno_pipe pipe);
 void a8xx_bus_clear_pending_transactions(struct adreno_gpu *adreno_gpu, bool gx_off);
 int a8xx_fault_handler(void *arg, unsigned long iova, int flags, void *data);
 void a8xx_flush(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
@@ -323,4 +325,9 @@ irqreturn_t a8xx_irq(struct msm_gpu *gpu);
 void a8xx_llc_activate(struct a6xx_gpu *a6xx_gpu);
 bool a8xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
 void a8xx_recover(struct msm_gpu *gpu);
+
+void a8xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
+		struct drm_printer *p);
+struct msm_gpu_state *a8xx_gpu_state_get(struct msm_gpu *gpu);
+int a8xx_gpu_state_put(struct msm_gpu_state *state);
 #endif /* __A6XX_GPU_H__ */

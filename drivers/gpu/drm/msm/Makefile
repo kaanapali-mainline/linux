@@ -28,7 +28,9 @@ adreno-y := \
 
 adreno-$(CONFIG_DEBUG_FS) += adreno/a5xx_debugfs.o \
 
-adreno-$(CONFIG_DRM_MSM_GPU_STATE)	+= adreno/a6xx_gpu_state.o
+adreno-$(CONFIG_DRM_MSM_GPU_STATE) += \
+	adreno/a6xx_gpu_state.o \
+	adreno/a8xx_gpu_state.o \
 
 msm-display-$(CONFIG_DRM_MSM_HDMI) += \
 	hdmi/hdmi.o \

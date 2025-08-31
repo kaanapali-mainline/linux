@@ -33,7 +33,7 @@ static void a8xx_aperture_slice_set(struct msm_gpu *gpu, enum adreno_pipe pipe, 
 	a6xx_gpu->cached_aperture = val;
 }
 
-static void a8xx_aperture_set(struct msm_gpu *gpu, enum adreno_pipe pipe)
+void a8xx_aperture_set(struct msm_gpu *gpu, enum adreno_pipe pipe)
 {
 	a8xx_aperture_slice_set(gpu, pipe, 0);
 }
