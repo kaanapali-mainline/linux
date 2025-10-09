@@ -1505,7 +1505,7 @@ static const struct qcom_pas_data kaanapali_soccp_resource = {
 };
 
 static const struct of_device_id qcom_pas_of_match[] = {
-	{ .compatible = "qcom,kaanapali-soccp-pas", .data = &kaanapali_soccp_resource},
+//	{ .compatible = "qcom,kaanapali-soccp-pas", .data = &kaanapali_soccp_resource},
 	{ .compatible = "qcom,msm8226-adsp-pil", .data = &msm8996_adsp_resource},
 	{ .compatible = "qcom,msm8953-adsp-pil", .data = &msm8996_adsp_resource},
 	{ .compatible = "qcom,msm8974-adsp-pil", .data = &adsp_resource_init},
