@@ -1,0 +1,846 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * Copyright (c) 2026, Robotix22
+ * Copyright (c) 2026, FantomTchi7
+ */
+
+/dts-v1/;
+
+#include <dt-bindings/clock/qcom,kaanapali-dispcc.h>
+#include <dt-bindings/clock/qcom,kaanapali-gcc.h>
+#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+
+#include "kaanapali.dtsi"
+#include "pmih0108-kaanapali.dtsi"
+
+/ {
+	model = "OnePlus 15";
+	compatible = "oneplus,infiniti", "qcom,kaanapali";
+	chassis-type = "handset";
+
+	chosen {
+		#address-cells = <2>;
+		#size-cells = <2>;
+		ranges;
+
+		framebuffer: framebuffer@fc800000 {
+			compatible = "simple-framebuffer";
+			reg = <0x0 0xfc800000 0x0 0x2b00000>;
+			width = <1272>;
+			height = <2772>;
+			stride = <(1272 * 4)>;
+			format = "a8r8g8b8";
+
+			clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+				 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+				 <&dispcc DISP_CC_MDSS_MDP_CLK>,
+				 <&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+				 <&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+				 <&dispcc DISP_CC_MDSS_BYTE0_CLK>,
+				 <&dispcc DISP_CC_MDSS_BYTE0_INTF_CLK>,
+				 <&dispcc DISP_CC_MDSS_PCLK0_CLK>,
+				 <&dispcc DISP_CC_MDSS_ESC0_CLK>;
+			power-domains = <&dispcc DISP_CC_MDSS_CORE_GDSC>;
+			memory-region = <&cont_splash_mem>;
+
+			vci-supply = <&pmh0101_l13>;
+			vddio-supply = <&pmh0101_l12>;
+			vdd-supply = <&pmh0101_l11>;
+			tvdd-supply = <&pmh0101_l4>;
+			vdds-supply = <&pmh0110_d_l3>;
+		};
+	};
+
+	reserved-memory {
+		cont_splash_mem: memory@fc800000 {
+			reg = <0x0 0xfc800000 0x0 0x2b00000>;
+			no-map;
+		};
+	};
+
+	clocks {
+		xo_board: xo-board {
+			compatible = "fixed-clock";
+			clock-frequency = <76800000>;
+			#clock-cells = <0>;
+		};
+
+		sleep_clk: sleep-clk {
+			compatible = "fixed-clock";
+			clock-frequency = <32764>;
+			#clock-cells = <0>;
+		};
+
+		bi_tcxo_div2: bi-tcxo-div2-clk {
+			compatible = "fixed-factor-clock";
+			#clock-cells = <0>;
+
+			clocks = <&rpmhcc RPMH_CXO_CLK>;
+			clock-mult = <1>;
+			clock-div = <2>;
+		};
+
+		bi_tcxo_ao_div2: bi-tcxo-ao-div2-clk {
+			compatible = "fixed-factor-clock";
+			#clock-cells = <0>;
+
+			clocks = <&rpmhcc RPMH_CXO_CLK_A>;
+			clock-mult = <1>;
+			clock-div = <2>;
+		};
+	};
+};
+
+&apps_rsc {
+	regulators-0 {
+		compatible = "qcom,pmh0101-rpmh-regulators";
+		qcom,pmic-id = "B_E0";
+
+		pmh0101_bob1: bob1 {
+			regulator-name = "pmh0101_bob1";
+			regulator-min-microvolt = <3008000>;
+			regulator-max-microvolt = <4000000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0101_bob2: bob2 {
+			regulator-name = "pmh0101_bob2";
+			regulator-min-microvolt = <2704000>;
+			regulator-max-microvolt = <3552000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0101_l1: ldo1 {
+			regulator-name = "pmh0101_l1";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l2: ldo2 {
+			regulator-name = "pmh0101_l2";
+			regulator-min-microvolt = <3008000>;
+			regulator-max-microvolt = <3048000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l4: ldo4 {
+			regulator-name = "pmh0101_l4";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l5: ldo5 {
+			regulator-name = "pmh0101_l5";
+			regulator-min-microvolt = <3100000>;
+			regulator-max-microvolt = <3148000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l6: ldo6 {
+			regulator-name = "pmh0101_l6";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <3008000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l7: ldo7 {
+			regulator-name = "pmh0101_l7";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <3008000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l8: ldo8 {
+			regulator-name = "pmh0101_l8";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <3008000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l9: ldo9 {
+			regulator-name = "pmh0101_l9";
+			regulator-min-microvolt = <3200000>;
+			regulator-max-microvolt = <3200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l10: ldo10 {
+			regulator-name = "pmh0101_l10";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l11: ldo11 {
+			regulator-name = "pmh0101_l11";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l12: ldo12 {
+			regulator-name = "pmh0101_l12";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l13: ldo13 {
+			regulator-name = "pmh0101_l13";
+			regulator-min-microvolt = <3000000>;
+			regulator-max-microvolt = <3000000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l14: ldo14 {
+			regulator-name = "pmh0101_l14";
+			regulator-min-microvolt = <3200000>;
+			regulator-max-microvolt = <3200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l15: ldo15 {
+			regulator-name = "pmh0101_l15";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l16: ldo16 {
+			regulator-name = "pmh0101_l16";
+			regulator-min-microvolt = <3300000>;
+			regulator-max-microvolt = <3300000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l17: ldo17 {
+			regulator-name = "pmh0101_l17";
+			regulator-min-microvolt = <2504000>;
+			regulator-max-microvolt = <2504000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0101_l18: ldo18 {
+			regulator-name = "pmh0101_l18";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+	};
+
+	regulators-1 {
+		compatible = "qcom,pmh0110-rpmh-regulators";
+		qcom,pmic-id = "D_E0";
+
+		pmh0110_d_s10: smps10 {
+			regulator-name = "pmh0110_d_s10";
+			regulator-min-microvolt = <1000000>;
+			regulator-max-microvolt = <1100000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_d_l1: ldo1 {
+			regulator-name = "pmh0110_d_l1";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1256000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_d_l2: ldo2 {
+			regulator-name = "pmh0110_d_l2";
+			regulator-min-microvolt = <912000>;
+			regulator-max-microvolt = <958000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_d_l3: ldo3 {
+			regulator-name = "pmh0110_d_l3";
+			regulator-min-microvolt = <880000>;
+			regulator-max-microvolt = <880000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_d_l4: ldo4 {
+			regulator-name = "pmh0110_d_l4";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+	};
+
+	regulators-2 {
+		compatible = "qcom,pmh0110-rpmh-regulators";
+		qcom,pmic-id = "F_E0";
+
+		pmh0110_f_s6: smps6 {
+			regulator-name = "pmh0110_f_s6";
+			regulator-min-microvolt = <300000>;
+			regulator-max-microvolt = <570000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_f_s7: smps7 {
+			regulator-name = "pmh0110_f_s7";
+			regulator-min-microvolt = <1224000>;
+			regulator-max-microvolt = <1372000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_f_s8: smps8 {
+			regulator-name = "pmh0110_f_s8";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <2000000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_f_l1: ldo1 {
+			regulator-name = "pmh0110_f_l1";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_f_l2: ldo2 {
+			regulator-name = "pmh0110_f_l2";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_f_l3: ldo3 {
+			regulator-name = "pmh0110_f_l3";
+			regulator-min-microvolt = <880000>;
+			regulator-max-microvolt = <936000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_f_l4: ldo4 {
+			regulator-name = "pmh0110_f_l4";
+			regulator-min-microvolt = <880000>;
+			regulator-max-microvolt = <912000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+	};
+
+	regulators-3 {
+		compatible = "qcom,pmh0110-rpmh-regulators";
+		qcom,pmic-id = "G_E0";
+
+		pmh0110_g_s7: smps7 {
+			regulator-name = "pmh0110_g_s7";
+			regulator-min-microvolt = <880000>;
+			regulator-max-microvolt = <1100000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_g_s9: smps9 {
+			regulator-name = "pmh0110_g_s9";
+			regulator-min-microvolt = <1000000>;
+			regulator-max-microvolt = <1100000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_g_l1: ldo1 {
+			regulator-name = "pmh0110_g_l1";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_g_l2: ldo2 {
+			regulator-name = "pmh0110_g_l2";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_g_l3: ldo3 {
+			regulator-name = "pmh0110_g_l3";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_g_l4: ldo4 {
+			regulator-name = "pmh0110_g_l4";
+			regulator-min-microvolt = <912000>;
+			regulator-max-microvolt = <912000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+	};
+
+	regulators-4 {
+		compatible = "qcom,pmh0110-rpmh-regulators";
+		qcom,pmic-id = "I_E0";
+
+		pmh0110_i_s7: smps7 {
+			regulator-name = "pmh0110_i_s7";
+			regulator-min-microvolt = <900000>;
+			regulator-max-microvolt = <972000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0110_i_l2: ldo2 {
+			regulator-name = "pmh0110_i_l2";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_i_l3: ldo3 {
+			regulator-name = "pmh0110_i_l3";
+			regulator-min-microvolt = <880000>;
+			regulator-max-microvolt = <920000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+
+		pmh0110_i_l4: ldo4 {
+			regulator-name = "pmh0110_i_l4";
+			regulator-min-microvolt = <800000>;
+			regulator-max-microvolt = <800000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_AUTO>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_AUTO>;
+
+			regulator-allow-set-load;
+		};
+	};
+
+	regulators-5 {
+		compatible = "qcom,pmh0104-rpmh-regulators";
+		qcom,pmic-id = "J_E1";
+
+		pmh0104_s1: smps1 {
+			regulator-name = "pmh0104_s1";
+			regulator-min-microvolt = <400000>;
+			regulator-max-microvolt = <1000000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0104_s2: smps2 {
+			regulator-name = "pmh0104_s2";
+			regulator-min-microvolt = <500000>;
+			regulator-max-microvolt = <1100000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0104_s3: smps3 {
+			regulator-name = "pmh0104_s3";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1300000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pmh0104_s4: smps4 {
+			regulator-name = "pmh0104_s4";
+			regulator-min-microvolt = <300000>;
+			regulator-max-microvolt = <1000000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+	};
+
+	regulators-6 {
+		compatible = "qcom,pmr735d-rpmh-regulators";
+		qcom,pmic-id = "K_E1";
+
+		pmr735d_l1: ldo1 {
+			regulator-name = "pmr735d_l1";
+			regulator-min-microvolt = <300000>;
+			regulator-max-microvolt = <1100000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmr735d_l2: ldo2 {
+			regulator-name = "pmr735d_l2";
+			regulator-min-microvolt = <700000>;
+			regulator-max-microvolt = <1000000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmr735d_l3: ldo3 {
+			regulator-name = "pmr735d_l3";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmr735d_l4: ldo4 {
+			regulator-name = "pmr735d_l4";
+			regulator-min-microvolt = <1000000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmr735d_l5: ldo5 {
+			regulator-name = "pmr735d_l5";
+			regulator-min-microvolt = <700000>;
+			regulator-max-microvolt = <1000000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmr735d_l6: ldo6 {
+			regulator-name = "pmr735d_l6";
+			regulator-min-microvolt = <1700000>;
+			regulator-max-microvolt = <2000000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pmr735d_l7: ldo7 {
+			regulator-name = "pmr735d_l7";
+			regulator-min-microvolt = <700000>;
+			regulator-max-microvolt = <848000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+	};
+
+	regulators-7 {
+		compatible = "qcom,pm8010-rpmh-regulators";
+		qcom,pmic-id = "M_E1";
+
+		pm8010_m_l1: ldo1 {
+			regulator-name = "pm8010_m_l1";
+			regulator-min-microvolt = <1000000>;
+			regulator-max-microvolt = <1100000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pm8010_m_l2: ldo2 {
+			regulator-name = "pm8010_m_l2";
+			regulator-min-microvolt = <1100000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pm8010_m_l3: ldo3 {
+			regulator-name = "pm8010_m_l3";
+			regulator-min-microvolt = <2800000>;
+			regulator-max-microvolt = <2900000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_m_l4: ldo4 {
+			regulator-name = "pm8010_m_l4";
+			regulator-min-microvolt = <2800000>;
+			regulator-max-microvolt = <2800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_m_l5: ldo5 {
+			regulator-name = "pm8010_m_l5";
+			regulator-min-microvolt = <1200000>;
+			regulator-max-microvolt = <1800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_m_l6: ldo6 {
+			regulator-name = "pm8010_m_l6";
+			regulator-min-microvolt = <2200000>;
+			regulator-max-microvolt = <2200000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_m_l7: ldo7 {
+			regulator-name = "pm8010_m_l7";
+			regulator-min-microvolt = <2800000>;
+			regulator-max-microvolt = <2800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+	};
+
+	regulators-8 {
+		compatible = "qcom,pm8010-rpmh-regulators";
+		qcom,pmic-id = "N_E1";
+
+		pm8010_n_l1: ldo1 {
+			regulator-name = "pm8010_n_l1";
+			regulator-min-microvolt = <1096000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pm8010_n_l2: ldo2 {
+			regulator-name = "pm8010_n_l2";
+			regulator-min-microvolt = <800000>;
+			regulator-max-microvolt = <1200000>;
+
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+			regulator-allowed-modes = <RPMH_REGULATOR_MODE_LPM RPMH_REGULATOR_MODE_HPM>;
+
+			regulator-allow-set-load;
+		};
+
+		pm8010_n_l3: ldo3 {
+			regulator-name = "pm8010_n_l3";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_n_l4: ldo4 {
+			regulator-name = "pm8010_n_l4";
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <1800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_n_l5: ldo5 {
+			regulator-name = "pm8010_n_l5";
+			regulator-min-microvolt = <2800000>;
+			regulator-max-microvolt = <2800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_n_l6: ldo6 {
+			regulator-name = "pm8010_n_l6";
+			regulator-min-microvolt = <2800000>;
+			regulator-max-microvolt = <2800000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+
+		pm8010_n_l7: ldo7 {
+			regulator-name = "pm8010_n_l7";
+			regulator-min-microvolt = <3304000>;
+			regulator-max-microvolt = <3304000>;
+			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+		};
+	};
+};
+
+&pmih0108_e1_eusb2_repeater {
+	vdd18-supply = <&pmh0101_l15>;
+	vdd3-supply = <&pmh0101_l5>;
+};
+
+&tlmm {
+	gpio-reserved-ranges = <36 8>, <74 1>, <119 2>, <144 4>;
+};
+
+&ufs_mem_hc {
+	reset-gpios = <&tlmm 217 GPIO_ACTIVE_LOW>;
+
+	vcc-supply = <&pmh0101_l17>;
+	vcc-max-microamp = <1200000>;
+	vccq-supply = <&pmh0110_d_l4>;
+	vccq-max-microamp = <1200000>;
+
+	status = "okay";
+};
+
+&ufs_mem_phy {
+	vdda-phy-supply = <&pmh0110_g_l4>;
+	vdda-pll-supply = <&pmh0110_d_l1>;
+
+	status = "okay";
+};
+
+&lpass_tlmm {
+	status = "disabled";
+};
+
+&lpass_vamacro {
+	status = "disabled";
+};
+
+&lpass_wsa2macro {
+	status = "disabled";
+};
+
+&lpass_rxmacro {
+	status = "disabled";
+};
+
+&lpass_txmacro {
+	status = "disabled";
+};
+
+&lpass_wsamacro {
+	status = "disabled";
+};
+
+&usb {
+	dr_mode = "peripheral";
+
+	status = "okay";
+};
+
+&usb_dp_qmpphy {
+	vdda-phy-supply = <&pmh0110_d_l1>;
+	vdda-pll-supply = <&pmh0110_f_l4>;
+
+	status = "okay";
+};
+
+&usb_hsphy {
+	vdd-supply = <&pmh0110_f_l4>;
+	vdda12-supply = <&pmh0110_d_l1>;
+
+	phys = <&pmih0108_e1_eusb2_repeater>;
+
+	status = "okay";
+};
